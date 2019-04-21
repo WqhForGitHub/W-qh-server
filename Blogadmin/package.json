@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "markdown-toc": "^1.2.0",
+    "marked": "^0.6.2"
+  }
+}

@@ -9,7 +9,8 @@ let blogListSchema = new Schema({
   selectedkind: {type:Object},
   briefcontent: {type:String},
   blogcontent: {type:String},
-  markdowncontent: {type:String}
+  markdowncontent: {type:String},
+  blogToc: {type:String}
 });
 
 module.exports = mongoose.model('BlogList', blogListSchema);

@@ -10,6 +10,20 @@ const personalInfo = require('./PersonalInfo/PersonalInfo')
 const client = require('./Database/redis');
 const md5 = require('./Login/md5')
 const Login = require('./Login/Login');
+const toc = require('markdown-toc')
+
+var marked = require('marked')
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+})
+
 const app = new Koa();
 let blogList; // 新增博客
 let updateblogitem; // 修改博客内容
@@ -24,6 +38,8 @@ let DeleteclassifyID; //删除类别ID
 let Personalinfo; // 个人信息
 let total = {}
 let token = '';
+
+
 
 // 跨域中间件
 app.use(cors({
@@ -145,6 +161,7 @@ app.listen(3000, () => {});
 
 // 添加博客到数据库
 function insert() {
+
   let Blog = new BlogList({
     publishTime:blogList.publishTime,   // 博客发布时间
     watchnum:blogList.watchnum,       // 观看数
@@ -153,7 +170,8 @@ function insert() {
     selectedkind:blogList.selectedkind,  // 类别
     briefcontent:blogList.briefcontent,  // 简要介绍
     blogcontent:blogList.blogcontent,    // 博客内容HTML形式
-    markdowncontent:blogList.markdowncontent
+    markdowncontent:blogList.markdowncontent,
+    blogToc: marked(toc(blogList.markdowncontent).content)
   });
   Blog.save((err, res) => {
     if (err) {
@@ -344,7 +362,7 @@ function getToken(username, password) {
 
 // 根据ID更新个人信息(博客发布数、分类、标签)
 function UpdatePersonalInfo(updatestr) {
-  let id = '5ca95c78dcca14e1bfe3da81'
+  let id = '5c5bf87cbce3b09234e9ef18'
   personalInfo.findByIdAndUpdate(id, updatestr, (err, res) => {
     if (err) {}
     else {
